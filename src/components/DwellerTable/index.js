@@ -1,33 +1,26 @@
-import Special from '@/components/Special';
-import testDwellers from '@/store/testDwellers';
-
 function generateHeaderRow({ colValues }) {
     function generateColumns() {
         return colValues.map(colValue =>
             <th scope="col">{colValue}</th>
         )
     }
-    return <tr>
-            {generateColumns()}
-        </tr>
+    return <tr>{generateColumns()}</tr>
 }
 
 function generateRow({ rowHeader, colValues }) {
-    return (
-        <tr>
+    return <tr>
             <th scope="row">{rowHeader}</th>
             {colValues.map(colValue => <td>{colValue}</td>)}
         </tr>
-    );
 }
 
-function generateDwellerTable() {
+function generateDwellerTable({ dwellerTableData }) {
     const getRowData = ({ firstName, lastName, special }) => ({
             rowHeader: firstName + ' ' + lastName,
             colValues: Array.from(special),
         });
 
-    const table = () => testDwellers.map(dwellerData =>{
+    const table = () => dwellerTableData.map(dwellerData =>{
         return generateRow(getRowData(dwellerData));
     });
     return (
@@ -35,10 +28,11 @@ function generateDwellerTable() {
     );
 }
 
-export default function template() {
+export default function template({
+    dwellerTableData
+}) {
     return (
         <div>
-            <h2>DwellerTable placeholder</h2>
             <table>
                 <caption>
                     Vault Dwellers
@@ -51,10 +45,9 @@ export default function template() {
                     }
                 </thead>
                 <tbody>
-                    { generateDwellerTable() }
+                    { generateDwellerTable({ dwellerTableData }) }
                 </tbody>
             </table>
-            <Special/>
         </div>
     )
 }
