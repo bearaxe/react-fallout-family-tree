@@ -1,24 +1,22 @@
 import Special from '@/components/Special';
 import testDwellers from '@/store/testDwellers';
 
-function generateHeaderRow({ tableCaption, colValues }) {
-    return <>
-        <caption>
-            {tableCaption}
-        </caption>
-        <tr>
-            {colValues.map(colValue =>
-                    <th scope="col">{colValue}</th>
-            )}
+function generateHeaderRow({ colValues }) {
+    function generateColumns() {
+        return colValues.map(colValue =>
+            <th scope="col">{colValue}</th>
+        )
+    }
+    return <tr>
+            {generateColumns()}
         </tr>
-    </>
 }
 
 function generateRow({ rowHeader, colValues }) {
-    return colValues.map(colValue =>
+    return (
         <tr>
             <th scope="row">{rowHeader}</th>
-            <td>{colValue}</td>
+            {colValues.map(colValue => <td>{colValue}</td>)}
         </tr>
     );
 }
@@ -28,12 +26,12 @@ function generateDwellerTable() {
             rowHeader: firstName + ' ' + lastName,
             colValues: Array.from(special),
         });
-    const table = () => testDwellers.map(dwellerData => 
-        generateRow(getRowData(dwellerData)));
+
+    const table = () => testDwellers.map(dwellerData =>{
+        return generateRow(getRowData(dwellerData));
+    });
     return (
-        <>
-        {table()}
-        </>
+        table()
     );
 }
 
@@ -42,8 +40,19 @@ export default function template() {
         <div>
             <h2>DwellerTable placeholder</h2>
             <table>
-                { generateHeaderRow({tableCaption: 'Vault Dwellers', colValues: [...'SPECIAL']}) }
-                { generateDwellerTable() }
+                <caption>
+                    Vault Dwellers
+                </caption>
+                <thead>
+                    {
+                        generateHeaderRow({
+                            colValues: ['Dweller Name',...'SPECIAL']
+                        })
+                    }
+                </thead>
+                <tbody>
+                    { generateDwellerTable() }
+                </tbody>
             </table>
             <Special/>
         </div>
